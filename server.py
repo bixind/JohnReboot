@@ -21,7 +21,7 @@ def processMessage(vk, disp, upd):
     args = list(s[1:] for s in filter(lambda s : len(s) > 1 and s[0] is '!', mssg.split()))
     if len(args) > 0:
         mssg = disp.dispense(args)
-    vk.method('messages.send', {'user_id' : upd[3], 'message' : upd[6]})
+    vk.method('messages.send', {'user_id' : upd[3], 'message' : mssg})
 
 h = Handler({4 : lambda upd : processMessage(vk, disp, upd)})
 
