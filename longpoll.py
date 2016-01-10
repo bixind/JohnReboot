@@ -13,18 +13,18 @@ class Handler:
             self.commands[upd[0]](upd)
 
 def longpoll(vk, handler):
-    try:
         v = vk.method('messages.getLongPollServer')
         ts = v['ts']
         key = v['key']
         wait = 25
         mode = 2
         while True:
-            data = urlencode({'act':'a_check', 'key' : key, 'ts' : ts, 'wait' : wait, 'mode' : mode})
-            s = urlopen('http://' + v['server'] + '?' + data)
-            l = json.loads(s.read().decode('utf-8'))
-            ts = l['ts']
-            for upd in l['updates']:
-                handler.handle(upd)
-    except Exception as e:
-        print(e)
+            try:
+                data = urlencode({'act':'a_check', 'key' : key, 'ts' : ts, 'wait' : wait, 'mode' : mode})
+                s = urlopen('http://' + v['server'] + '?' + data)
+                l = json.loads(s.read().decode('utf-8'))
+                ts = l['ts']
+                for upd in l['updates']:
+                    handler.handle(upd)
+            except Exception as e:
+                print(e)
