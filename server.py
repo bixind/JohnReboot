@@ -20,7 +20,7 @@ def processMessage(vk, disp, upd):
     mssg = upd[6]
     args = list(s[1:] for s in filter(lambda s : len(s) > 1 and s[0] is '!', mssg.split()))
     if len(args) > 0:
-        disp(args)
+        disp.dispense(args)
     else:
         vk.method('messages.send', {'user_id' : upd[3], 'message' : upd[6]})
 
