@@ -7,7 +7,7 @@ from threading import *
 # with open("session.token", "wb") as f:
 # 	vk = VkApi(token=f.readline())
 
-with open('token.txt') as f:
+with open('session.token') as f:
     at = f.readline()
 
 vk = VkApiExt(token=at)
