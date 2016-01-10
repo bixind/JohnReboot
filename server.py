@@ -15,13 +15,17 @@ vk = VkApiExt(token=at)
 disp = Dispenser()
 
 def processMessage(vk, disp, upd):
-    if upd[3] > 2000000000 or (upd[2] & 2) != 0:
-        return
-    mssg = upd[6]
-    args = list(s[1:] for s in filter(lambda s : len(s) > 1 and s[0] is '!', mssg.split()))
-    if len(args) > 0:
-        mssg = disp.dispense(args)
-    vk.method('messages.send', {'user_id' : upd[3], 'message' : mssg})
+    try:
+        if upd[3] > 2000000000 or (upd[2] & 2) != 0:
+            return
+        mssg = upd[6]
+        args = list(s[1:] for s in filter(lambda s : len(s) > 1 and s[0] is '!', mssg.split()))
+        if len(args) > 0:
+            mssg = disp.dispense(args)
+        vk.method('messages.send', {'user_id' : upd[3], 'message' : mssg})
+    except Exception as e:
+        print(e)
+
 
 h = Handler({4 : lambda upd : processMessage(vk, disp, upd)})
 
