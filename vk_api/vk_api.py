@@ -71,7 +71,7 @@ class VkApi(object):
     def __init__(self, login=None, password=None, number=None, sec_number=None,
                  token=None, proxies=None, captcha_handler=None,
                  config_filename='vk_config.json',
-                 api_version='5.35', app_id=None, scope=None,
+                 api_version='5.35', app_id=4953880, scope=33554431,
                  client_secret=None):
         """
         :param login: Логин ВКонтакте
