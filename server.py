@@ -21,7 +21,7 @@ def processMessage(vk, disp, upd):
         mssg = upd[6]
         args = mssg.split()
         if len(args) > 0 and len(args[0]) > 0 and args[0][0] is '!':
-            args[0] = args[1:]
+            args = args[1:]
             mssg = disp.dispense(args[0], [upd[3], args])
         vk.method('messages.send', {'user_id' : upd[3], 'message' : mssg})
     except Exception as e:
