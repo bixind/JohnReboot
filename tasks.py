@@ -12,9 +12,9 @@ class Dispenser:
         self.modules = {}
         self.modules['погода'] = weather.makeWeatherReport
 
-    def dispense(self, args):
+    def dispense(self, command, args):
         try:
-            return self.modules.get(args[1][0], defaultModule)(args)
+            return self.modules.get(command, defaultModule)(args)
         except Exception as e:
             logging.exception(e)
             return 'Error'
