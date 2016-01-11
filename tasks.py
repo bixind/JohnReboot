@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import weather
+import weather.weather as weather
 from time import *
 import logging
 

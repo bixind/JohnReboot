@@ -6,8 +6,11 @@ import os.path
 from fileparse import *
 
 pref = '{http://weather.yandex.ru/forecast}'
+prpath = 'preferences/'
 
 defaultargs = {'сейчас'}
+
+clockDict = {'1' : 'Утро', '2' : 'День', '3' : 'Вечер', '4' : 'Ночь'}
 
 def getNow(fact):
     weather_report = ['Сейчас в Ижевске:']
@@ -22,12 +25,13 @@ def getNow(fact):
 def getDay(day):
     day_report = ['Прогноз на ' + day.get('date') + ':']
     for part in day.findall(pref + 'day_part'):
-        if part.find(pref + 'temperature') is not None:
-            temp = part.find(pref + 'temperature').text
-        else:
-            temp = part.find(pref + 'temperature_from').text + '...' + part.find(pref + 'temperature_to').text
-        wt = part.find(pref + 'weather_type').text.title()
-        day_report.append('{:<11}{}'.format(temp, wt))
+        if part.get('typeid') in clockDict:
+            if part.find(pref + 'temperature') is not None:
+                temp = part.find(pref + 'temperature').text
+            else:
+                temp = part.find(pref + 'temperature_from').text + '...' + part.find(pref + 'temperature_to').text
+            wt = part.find(pref + 'weather_type').text.title()
+            day_report.append('{:<7}{:<11}{}'.format(clockDict[part.get('typeid')], temp, wt))
     return day_report
 
 def makeWeatherReport(args):
@@ -37,13 +41,13 @@ def makeWeatherReport(args):
     wp = str(wpb.read(), 'utf-8')
     root = et.fromstring(wp)
     if len(args) <= 1:
-        if os.path.exists(str(id) + '.txt'):
-            args = jsonRead(str(id) + '.txt')
+        if os.path.exists(prpath + str(id) + '.txt'):
+            args = jsonRead(prpath + str(id) + '.txt')
         else:
-            args = defaultargs
+            args = defaultargs()
     else:
         if 'предпочитаю' in args:
-            jsonSave(str(id) + '.txt', args)
+            jsonSave(prpath + str(id) + '.txt', args)
     report = ['Сводка погоды']
     predictions = root.findall(pref + 'day')
     if 'сейчас' in args:
