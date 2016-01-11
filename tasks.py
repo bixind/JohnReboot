@@ -14,7 +14,7 @@ class Dispenser:
 
     def dispense(self, args):
         try:
-            return self.modules.get(args[0], defaultModule)(args)
+            return self.modules.get(args[1][0], defaultModule)(args)
         except Exception as e:
             logging.exception(e)
             return 'Error'
