@@ -19,9 +19,9 @@ def processMessage(vk, disp, upd):
         if upd[3] > 2000000000 or (upd[2] & 2) != 0:
             return
         mssg = upd[6]
-        args = list(s[1:] for s in filter(lambda s : len(s) > 1 and s[0] is '!', mssg.split()))
-        if len(args) > 0:
-            mssg = disp.dispense(args)
+        args = mssg.split()
+        if len(args) > 0 and len(args[0]) > 0 and args[0][0] is '!':
+            mssg = disp.dispense([upd[3], args])
         vk.method('messages.send', {'user_id' : upd[3], 'message' : mssg})
     except Exception as e:
         logging.exception(e)

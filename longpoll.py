@@ -27,6 +27,7 @@ def longpoll(vk, handler):
                 ts = l['ts']
                 for upd in l['updates']:
                     handler.handle(upd)
+                vk.method('account.setOnline', {'void' : 0})
             except Exception as e:
                 logging.exception(e)
                 v = vk.method('messages.getLongPollServer')
