@@ -2,6 +2,7 @@
 
 import weather
 from time import *
+import logging
 
 def defaultModule(args):
     return 'Команда ' + args[0] + ' не найдена'
@@ -14,6 +15,6 @@ class Dispenser:
     def dispense(self, args):
         try:
             return self.modules.get(args[0], defaultModule)(args)
-        except:
-            print('some errors', time())
+        except Exception as e:
+            logging.exception(e)
             return 'Error'

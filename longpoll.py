@@ -3,6 +3,7 @@
 from urllib.request import *
 from urllib.parse import *
 import json
+import logging
 
 
 class Handler:
@@ -27,4 +28,9 @@ def longpoll(vk, handler):
                 for upd in l['updates']:
                     handler.handle(upd)
             except Exception as e:
-                print(e)
+                logging.exception(e)
+                v = vk.method('messages.getLongPollServer')
+                ts = v['ts']
+                key = v['key']
+                wait = 25
+                mode = 2

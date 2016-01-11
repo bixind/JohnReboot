@@ -4,9 +4,9 @@ from vk_api.vk_api_ext import *
 from longpoll import *
 from threading import *
 from tasks import *
+import logging as log
 
-# with open("session.token", "wb") as f:
-# 	vk = VkApi(token=f.readline())
+log.basicConfig(filename='log.txt', format='%(asctime)s\n%(levelname)s:%(name)s:%(message)s', datefmt='%d/%m/%Y %H:%M:%S')
 
 with open('session.token') as f:
     at = f.readline()
@@ -24,7 +24,7 @@ def processMessage(vk, disp, upd):
             mssg = disp.dispense(args)
         vk.method('messages.send', {'user_id' : upd[3], 'message' : mssg})
     except Exception as e:
-        print(e)
+        logging.exception(e)
 
 
 h = Handler({4 : lambda upd : processMessage(vk, disp, upd)})
