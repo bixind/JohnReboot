@@ -6,7 +6,7 @@ import os.path
 from fileparse import *
 
 pref = '{http://weather.yandex.ru/forecast}'
-prpath = 'preferences/'
+prpath = 'weather/preferences/'
 
 defaultargs = {'сейчас'}
 
