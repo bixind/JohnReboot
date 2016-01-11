@@ -20,6 +20,7 @@ def getNow(fact):
     weather_report.append('Влажность: ' + fact.find(pref + 'humidity').text + '%')
     weather_report.append('Давление: ' + fact.find(pref + 'pressure').text + ' мм рт. ст.')
     weather_report.append('Скорость ветра: ' + fact.find(pref + 'wind_speed').text + ' м/с')
+    weather_report.append('')
     return weather_report
 
 def getDay(day):
