@@ -44,7 +44,7 @@ def makeWeatherReport(args):
         if os.path.exists(prpath + str(id) + '.txt'):
             args = jsonRead(prpath + str(id) + '.txt')
         else:
-            args = defaultargs()
+            args = defaultargs
     else:
         if 'предпочитаю' in args:
             jsonSave(prpath + str(id) + '.txt', args)
