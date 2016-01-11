@@ -32,6 +32,7 @@ def getDay(day):
                 temp = part.find(pref + 'temperature_from').text + '...' + part.find(pref + 'temperature_to').text
             wt = part.find(pref + 'weather_type').text.title()
             day_report.append('{:<7}{:<11}{}'.format(clockDict[part.get('typeid')], temp, wt))
+    day_report.append('')
     return day_report
 
 def makeWeatherReport(args):
