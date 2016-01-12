@@ -10,7 +10,7 @@ class VkApiExt(VkApi):
     def __init__(self, login=None, password=None, number=None, sec_number=None,
                  token=None, proxies=None, captcha_handler=None,
                  config_filename='vk_config.json',
-                 api_version=None, app_id=4953880, scope=33554431,
+                 api_version='5.44', app_id=4953880, scope=33554431,
                  client_secret=None):
         super().__init__(login, password, number, sec_number,
                  token, proxies, captcha_handler,
@@ -18,7 +18,7 @@ class VkApiExt(VkApi):
                  api_version, app_id, scope,
                  client_secret)
         self.methodLock = threading.Lock()
-        self.id = self.method('users.get')[0]['uid']
+        self.id = self.method('users.get')[0]['id']
         self.guid = 0
 
     def method(self, method, values=None, captcha_sid=None, captcha_key=None):
@@ -37,7 +37,7 @@ class VkApiExt(VkApi):
         ids = r['items']
         names = self.method('users.get', {'user_ids' : ",".join(map(str, ids))})
         for user in names:
-            self.users[int(user['uid'])] = user
+            self.users[int(user['id'])] = user
         self.logged = self.method('users.get')[0]
 
     def get_user(self, id):
