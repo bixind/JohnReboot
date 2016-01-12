@@ -5,7 +5,7 @@ from time import *
 import logging
 
 def defaultModule(args):
-    return 'Команда ' + str(args[0]) + ' не найдена'
+    return 'Команда ' + str(args[1][0]) + ' не найдена'
 
 class Dispenser:
     def __init__(self):

@@ -25,6 +25,7 @@ def getNow(fact):
 
 def getDay(day):
     day_report = ['Прогноз на ' + day.get('date') + ':']
+    day_report.append(day.find(pref + 'sunrise').text + ' - ' + day.find(pref + 'sunset').text)
     for part in day.findall(pref + 'day_part'):
         if part.get('typeid') in clockDict:
             if part.find(pref + 'temperature') is not None:
