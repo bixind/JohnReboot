@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from vk_api.vk_api_ext import *
+import vk_api
 from longpoll import *
 from threading import *
 from tasks import *
@@ -11,7 +11,7 @@ log.basicConfig(filename='log.txt', format='%(asctime)s\n%(levelname)s:%(name)s:
 with open('session.token') as f:
     at = f.readline()
 
-vk = VkApiExt(token=at)
+vk = vk_api.vk_api_ext.VkApiExt(token=at)
 disp = Dispenser()
 
 def processMessage(vk, disp, upd):
