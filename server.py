@@ -5,6 +5,7 @@ from longpoll import *
 from threading import *
 from tasks import *
 import logging as log
+from collections import namedtuple
 
 log.basicConfig(filename='log.txt', format='%(asctime)s\n%(levelname)s:%(name)s:%(message)s', datefmt='%d/%m/%Y %H:%M:%S')
 
@@ -14,6 +15,8 @@ with open('session.token') as f:
 vk = vk_api.vk_api_ext.VkApiExt(token=at)
 disp = Dispenser()
 
+Command = namedtuple('Command', ['id', 'args'])
+
 def processMessage(vk, disp, upd):
     try:
         if upd[3] > 2000000000 or (upd[2] & 2) != 0:
@@ -22,7 +25,7 @@ def processMessage(vk, disp, upd):
         args = mssg.split()
         if len(args) > 0 and len(args[0]) > 0 and args[0][0] is '!':
             args[0] = args[0][1:]
-            mssg = disp.dispense(args[0], [upd[3], args])
+            mssg = disp.dispense(args[0], Command(upd[3], args))
         vk.method('messages.send', {'user_id' : upd[3], 'message' : mssg})
     except Exception as e:
         logging.exception(e)
