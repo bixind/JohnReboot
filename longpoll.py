@@ -19,6 +19,7 @@ def longpoll(vk, handler):
         key = v['key']
         wait = 25
         mode = 2
+        l = []
         while True:
             try:
                 data = urlencode({'act':'a_check', 'key' : key, 'ts' : ts, 'wait' : wait, 'mode' : mode})
@@ -28,8 +29,10 @@ def longpoll(vk, handler):
                 for upd in l['updates']:
                     handler.handle(upd)
                 vk.method('account.setOnline', {'void' : 0})
+            except HTTPError as e:
+                logging.error(e)
             except Exception as e:
-                logging.exception(e)
+                logging.exception(l)
                 v = vk.method('messages.getLongPollServer')
                 ts = v['ts']
                 key = v['key']
