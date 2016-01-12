@@ -30,7 +30,7 @@ def processMessage(vk, disp, upd):
             values.update(newvals)
         values['user_id'] = upd[3]
         # values = dict(filter(lambda x : x[1] is not None, values.items()))
-        vk.method('messages.send', values)
+        vk.sendMessage(values)
     except Exception as e:
         logging.exception(e)
 
