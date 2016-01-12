@@ -2,6 +2,7 @@
 
 from urllib.request import *
 from urllib.parse import *
+from urllib.error import *
 import json
 import logging
 
@@ -31,10 +32,11 @@ def longpoll(vk, handler):
                 vk.method('account.setOnline', {'void' : 0})
             except HTTPError as e:
                 logging.error(e)
+                v = vk.method('messages.getLongPollServer')
+                ts = v['ts']
+                key = v['key']
             except Exception as e:
                 logging.exception(l)
                 v = vk.method('messages.getLongPollServer')
                 ts = v['ts']
                 key = v['key']
-                wait = 25
-                mode = 2
