@@ -22,7 +22,7 @@ def processMessage(vk, disp, upd):
         if upd[3] > 2000000000 or (upd[2] & 2) != 0:
             return
         mssg = upd[6]
-        args = mssg.split()
+        args = list(s.lower() for s in mssg.split())
         values = {'message' : mssg}
         if len(args) > 0 and len(args[0]) > 0 and args[0][0] is '!':
             args[0] = args[0][1:]

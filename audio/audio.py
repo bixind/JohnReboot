@@ -1,5 +1,5 @@
 import random
-from genres import *
+from audio.genres import *
 
 def getAudio(com, vk):
     offset = random.randint(1, 100)
