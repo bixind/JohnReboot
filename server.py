@@ -27,6 +27,7 @@ def processMessage(vk, disp, upd):
         if len(args) > 0 and len(args[0]) > 0 and args[0][0] is '!':
             args[0] = args[0][1:]
             newvals = disp.dispense(args[0], Command(upd[3], args))
+            del values['message']
             values.update(newvals)
         values['user_id'] = upd[3]
         # values = dict(filter(lambda x : x[1] is not None, values.items()))
