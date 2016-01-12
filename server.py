@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import vk_api
+import vk_api.vk_api_ext
 from longpoll import *
 from threading import *
 from tasks import *
