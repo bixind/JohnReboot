@@ -37,7 +37,7 @@ def getDay(day):
     day_report.append('')
     return day_report
 
-def makeWeatherReport(args):
+def makeWeatherReport(args, vk):
     id = args[0]
     args = args[1]
     wpb = urlopen('http://export.yandex.ru/weather-ng/forecasts/28411.xml')
@@ -65,4 +65,4 @@ def makeWeatherReport(args):
         report.extend(getDay(predictions[1]))
     if 'послезавтра' in args and len(predictions) > 2:
         report.extend(getDay(predictions[2]))
-    return '\n'.join(report)
+    return {'message' : str('\n'.join(report))}

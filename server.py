@@ -13,7 +13,7 @@ with open('session.token') as f:
     at = f.readline()
 
 vk = vk_api.vk_api_ext.VkApiExt(token=at)
-disp = Dispenser()
+disp = Dispenser(vk)
 
 Command = namedtuple('Command', ['id', 'args'])
 
@@ -23,10 +23,14 @@ def processMessage(vk, disp, upd):
             return
         mssg = upd[6]
         args = mssg.split()
+        values = {'message' : mssg}
         if len(args) > 0 and len(args[0]) > 0 and args[0][0] is '!':
             args[0] = args[0][1:]
-            mssg = disp.dispense(args[0], Command(upd[3], args))
-        vk.method('messages.send', {'user_id' : upd[3], 'message' : mssg})
+            newvals = disp.dispense(args[0], Command(upd[3], args))
+            values.update(newvals)
+        values['user_id'] = upd[3]
+        # values = dict(filter(lambda x : x[1] is not None, values.items()))
+        vk.method('messages.send', values)
     except Exception as e:
         logging.exception(e)
 
