@@ -13,7 +13,11 @@ def get_access_token(login, password):
 	print("Authorization: OK")
 	return vk.token["access_token"]
 
-login, password = sys.stdin.readline().split()
+f = open('config.txt', 'r')
+#login, password = sys.stdin.readline().split()
+login, password = f.readline().split()
+f.close()
+
 access_token = get_access_token(login, password)
 with open("session.token", "wb") as f:
 	f.write(access_token.encode())
