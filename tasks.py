@@ -6,7 +6,7 @@ from time import *
 import logging
 
 def defaultModule(com, vk):
-    return 'Команда ' + str(com.args[0]) + ' не найдена'
+    return {'message' : 'Команда ' + str(com.args[0]) + ' не найдена'}
 
 class Dispenser:
     def __init__(self, vk):
