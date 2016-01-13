@@ -30,7 +30,7 @@ class VkApiExt(VkApi):
         return val
 
     def sendMessage(self, values, captcha_sid=None, captcha_key=None):
-        values['guid'] = self.guid
+        # values['guid'] = self.guid
         self.guid+=1
         return self.method('messages.send', values=values, captcha_sid=captcha_sid, captcha_key=captcha_key)
 
