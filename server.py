@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import vk_api.vk_api_ext
+import vk_api.vk_api.ApiError
 from longpoll import *
 from threading import *
 from tasks import *
@@ -32,10 +33,13 @@ def processMessage(vk, disp, upd):
             values.update(newvals)
         values['user_id'] = upd[3]
         # values = dict(filter(lambda x : x[1] is not None, values.items()))
-        vk.sendMessage(values)
+        try:
+            vk.sendMessage(values)
+        except vk_api.vk_api.ApiError as e:
+            logging.warning(e)
+            vk.sendMessage({'message' : 'Nihil verum est licet omnia'})
     except Exception as e:
         logging.exception(e)
-
 
 
 def statusChange(upd):

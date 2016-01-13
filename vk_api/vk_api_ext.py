@@ -23,8 +23,10 @@ class VkApiExt(VkApi):
 
     def method(self, method, values=None, captcha_sid=None, captcha_key=None):
         self.methodLock.acquire()
-        val = super().method(method, values, captcha_sid, captcha_key)
-        self.methodLock.release()
+        try:
+            val = super().method(method, values, captcha_sid, captcha_key)
+        finally:
+            self.methodLock.release()
         return val
 
     def sendMessage(self, values, captcha_sid=None, captcha_key=None):
