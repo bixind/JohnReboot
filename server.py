@@ -36,7 +36,15 @@ def processMessage(vk, disp, upd):
         logging.exception(e)
 
 
-h = Handler({4 : lambda upd : processMessage(vk, disp, upd)})
+
+def statusChange(upd):
+    with open('history.txt', 'a') as f:
+        print(upd, file = f)
+
+h = Handler({4 : lambda upd : processMessage(vk, disp, upd),
+             8 : statusChange,
+             9 : statusChange
+             })
 
 t = Thread(daemon=True, target=longpoll, args=[vk, h])
 
