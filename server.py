@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import vk_api.vk_api_ext
-import vk_api.vk_api.ApiError
+import vk_api.vk_api
 from longpoll import *
 from threading import *
 from tasks import *
