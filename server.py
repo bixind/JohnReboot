@@ -6,6 +6,7 @@ from threading import *
 from tasks import *
 import logging as log
 from collections import namedtuple
+import time
 
 log.basicConfig(filename='log.txt', format='%(asctime)s\n%(levelname)s:%(name)s:%(message)s', datefmt='%d/%m/%Y %H:%M:%S')
 
@@ -39,12 +40,11 @@ def processMessage(vk, disp, upd):
 
 def statusChange(upd):
     with open('history.txt', 'a') as f:
-        print(upd, file = f)
+        print(*(upd + [round(time.time())]), file = f)
 
-h = Handler({4 : lambda upd : processMessage(vk, disp, upd),
-             8 : statusChange,
-             9 : statusChange
-             })
+h = Handler({4: lambda upd : processMessage(vk, disp, upd),
+             8: statusChange,
+             9: statusChange})
 
 t = Thread(daemon=True, target=longpoll, args=[vk, h])
 
