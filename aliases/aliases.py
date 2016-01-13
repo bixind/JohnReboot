@@ -16,8 +16,11 @@ def getAlias(id, command):
         return None
 
 def setAlias(com, vk):
+    if len(com.args) < 3:
+        return {'message' : 'Consequentia non valet'}
     userAliases = {}
-    if os.path.exists(prpath + str(id) + '.txt'):
-        userAliases = jsonRead(prpath + str(id) + '.txt')
+    if os.path.exists(prpath + str(com.id) + '.txt'):
+        userAliases = jsonRead(prpath + str(com.id) + '.txt')
     userAliases[com.args[1]] = com.args[2:]
-    jsonSave(prpath + str(id) + '.txt', userAliases)
+    jsonSave(prpath + str(com.id) + '.txt', userAliases)
+    return {'message' : 'Ad futarum memoriam'}

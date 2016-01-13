@@ -22,7 +22,10 @@ class Dispenser:
             if command in self.modules:
                 return self.modules[com.args[0]](com, self.vk)
             newargs = aliases.getAlias(com.id, command)
-            com._replace(args = com.args[1:] + newargs)
+            if newargs is None:
+                return defaultModule(com, self.vk)
+            args = (newargs + com.args[1:])
+            com = com.__new__(com.__class__, com.id, args)
             command = com.args[0]
             if command in self.modules:
                 return self.modules[com.args[0]](com, self.vk)
