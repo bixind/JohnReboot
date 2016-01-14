@@ -15,9 +15,8 @@ def getUser(name):
 def getRating(com, vk):
     name = com.args[1]
     user = getUser(name)
-    print(user)
     if user['followed_by']['count'] == 0 or user['follows']['count'] == 0 or user['media']['count'] == 0:
             rt =  0
     else:
         rt = user['followed_by']['count']**2/(user['media']['count']*user['follows']['count'])
-    return {'message': name + ' : ' + rt}
+    return {'message': name + ' : ' + str(rt)}
