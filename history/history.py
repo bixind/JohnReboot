@@ -24,7 +24,7 @@ def makeChart(vk):
                 l[id].append([int(s[0]) - 8, int(s[3])])
 
     mpl.rcdefaults()
-    font = {'family': 'Courier New',
+    font = {'family': 'stixgeneral',
             'weight': 'normal'}
     mpl.rc('font', **font)
 
@@ -68,3 +68,4 @@ def getHistory(args, vk):
     vu = upl.VkUpload(vk)
     r = vu.photo_messages(photos = ['hist.png'])
     return {'attachment' : 'photo' + str(r[0]['owner_id']) + '_' + str(r[0]['id'])}
+
