@@ -3,14 +3,16 @@ import matplotlib.pyplot as plt
 import matplotlib.font_manager as fonts
 import matplotlib as mpl
 import time
+import datetime as date
 import random
 
 def makeChart(vk):
+    d = date.datetime.now(date.timezone(date.timedelta(hours=4)))
     day = 60 * 60 * 24
     now = int(time.time())
     tp = time.localtime(now)
     dh = day - (tp.tm_min * 60 + tp.tm_sec)
-    ch = tp.tm_hour
+    ch = d.hour
     offx = 100
 
     l = dict()
@@ -55,6 +57,8 @@ def makeChart(vk):
             elif el[0] == 1 and pos != -1:
                 plt.plot([(pos - now + day) // 60, (el[1] - now + day) // 60], [dx, dx], color = usrclr, linewidth=2.0)
                 pos = -1
+        if pos != -1:
+            plt.plot([(pos - now + day) // 60, day // 60], [dx, dx], color = usrclr, linewidth=2.0)
         plt.annotate(usernames[id], xy = (-offx, dx + 0.2), fontproperties = fonts.FontProperties(size = 10))
     # plt.plot([0],[0], 'b', linewidth=2.0)
     # plt.plot([day // 60],[dx + 1], 'b', linewidth=2.0)
