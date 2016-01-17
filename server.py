@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import matplotlib
+# Force matplotlib to not use any Xwindows backend.
+matplotlib.use('Agg')
+
 import vk_api.vk_api_ext
 import vk_api.vk_api
 from longpoll import *
