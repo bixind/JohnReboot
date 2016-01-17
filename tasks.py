@@ -4,6 +4,7 @@ import weather.weather as weather
 import audio.audio as audio
 import aliases.aliases as aliases
 import instrate.instrate as instrate
+import history.history as history
 from time import *
 import logging
 
@@ -15,7 +16,8 @@ class Dispenser:
         self.modules = {'погода' : weather.makeWeatherReport,
                         'аудио' : audio.getAudio,
                         'иначе' : aliases.setAlias,
-                        'рейтинг' : instrate.getRating}
+                        'рейтинг' : instrate.getRating,
+                        'история' : history.getHistory}
         self.vk = vk
 
     def dispense(self, com):
