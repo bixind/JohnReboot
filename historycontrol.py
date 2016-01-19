@@ -15,7 +15,7 @@ def statusChange(upd):
         with open('history.txt', 'a') as f:
             print(*(upd + [now]), file = f)
         curdname = time.strftime('%Y-%m-%d', time.localtime(now))
-        id = upd[3]
+        id = -upd[1]
         fp.ensure_dir('days/' + curdname)
         with open('days/' + curdname + '/' + str(id) + '.txt', 'a') as f:
             print(*(upd + [now]), file = f)
