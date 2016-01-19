@@ -5,6 +5,7 @@ import matplotlib as mpl
 import time
 import datetime as date
 import random
+from historycontrol import historyLock
 
 def makeChart(vk):
     d = date.datetime.now(date.timezone(date.timedelta(hours=4)))
@@ -16,7 +17,8 @@ def makeChart(vk):
     offx = 100
 
     l = dict()
-    with open('history.txt') as f:
+
+    with historyLock, open('history.txt') as f:
         for s in f:
             s = s.split()
             id = -int(s[1])
@@ -24,6 +26,22 @@ def makeChart(vk):
                 l[id] = []
             if now - day < int(s[3]):
                 l[id].append([int(s[0]) - 8, int(s[3])])
+
+
+    tmid = []
+    for id in l:
+        st = 0
+        pos = -1
+        for el in l[id]:
+            if el[0] == 0 and pos == -1:
+                pos = el[1]
+            elif el[0] == 1 and pos != -1:
+                st += el[1] - pos
+                pos = -1
+        if pos != -1:
+            st += now - pos
+        tmid.append([st, id])
+    tmid.sort(key = lambda x : x[0])
 
     mpl.rcdefaults()
     font = {'family': 'stixgeneral',
@@ -45,7 +63,7 @@ def makeChart(vk):
         if ch < 0:
             ch += 24
     dx = 0
-    for id in l:
+    for st, id in tmid:
         dx += 1
         pos = -1
         usrclr = [random.random(), random.random(), random.random()]
