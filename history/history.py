@@ -92,15 +92,14 @@ def makePersonalChart(id):
         last_update = int(f.readline())
     dg = list()
     cnt = 10
-    while True and cnt > 0:
+    while cnt > 0:
         cnt-=1
         curdname = time.strftime('%Y-%m-%d', time.localtime(last_update ))
-        if not os.path.exists('days/' + curdname + '/' + str(id) + '.txt'):
-            break
-        l = []
-        with historyLock, open('days/' + curdname + '/' + str(id) + '.txt') as f:
-            for s in f:
-                s = s.split()
+        if os.path.exists('days/' + curdname + '/' + str(id) + '.txt'):
+            l = []
+            with historyLock, open('days/' + curdname + '/' + str(id) + '.txt') as f:
+                for s in f:
+                    s = s.split()
                 l.append([int(s[0]) - 8, int(s[3]) - last_update])
         dg.append([curdname, l])
         last_update -= day
