@@ -9,5 +9,3 @@ def convertText(text):
     with open('output.txt', 'r') as f:
         res = f.read()
     return res
-
-print(convertText('asdasd'))

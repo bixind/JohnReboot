@@ -13,6 +13,7 @@ import logging as log
 from collections import namedtuple
 import time
 from historycontrol import statusChange
+import convert
 
 log.basicConfig(filename='log.txt', format='%(asctime)s\n%(levelname)s:%(name)s:%(message)s', datefmt='%d/%m/%Y %H:%M:%S')
 
@@ -37,7 +38,8 @@ def processMessage(vk, disp, upd):
             newvals = disp.dispense(Command(upd[3], args))
             del values['message']
             values.update(newvals)
-        # values = dict(filter(lambda x : x[1] is not None, values.items()))
+        else:
+            values['message'] = convert.convertText(mssg)
         try:
             vk.sendMessage(values)
         except vk_api.vk_api.ApiError as e:
