@@ -9,6 +9,8 @@ from historycontrol import historyLock
 import os.path
 
 day = 60 * 60 * 24
+empty_timeout = 5*60
+timeout = 14 * 60
 
 mpl.rcdefaults()
 font = {'family': 'stixgeneral',
@@ -32,8 +34,27 @@ def makeChart(vk):
             if id not in l:
                 l[id] = []
             if now - day < int(s[3]):
-                l[id].append([int(s[0]) - 8, int(s[3])])
+                l[id].append([int(s[0]) - 8, int(s[3]), int(s[2])])
 
+    fxl = dict()
+
+    for id in l:
+        pos = -1
+        fxl[id] = []
+        for el in l[id]:
+            if el[0] == 0 and pos == -1:
+                fxl[id].append(el)
+                pos = el[1]
+            elif el[0] == 0 and pos != -1:
+                fxl[id].append([1, pos + empty_timeout, 0])
+                fxl[id].append(el)
+                pos = el[1]
+            elif el[0] == 1 and pos != -1:
+                if el[2] == 1:
+                    el[1] -= timeout
+                fxl[id].append(el)
+                pos = -1
+    l = fxl
 
     tmid = []
     for id in l:
@@ -68,7 +89,7 @@ def makeChart(vk):
     for st, id in tmid:
         dx += 1
         pos = -1
-        usrclr = [random.random(), random.random(), random.random()]
+        usrclr = [random.random() / 2, random.random() / 2, random.random() / 2]
         usrclrfd = list(min(1, clr + 0.5) for clr in usrclr)
         plt.axhline(dx, lw = 1, color = usrclrfd)
         for el in l[id]:
@@ -88,21 +109,45 @@ def makeChart(vk):
     plt.savefig('hist.png', bbox_inches = 'tight')
 
 def makePersonalChart(id):
-    with historyLock, open('days/lastupdate.txt') as f:
-        last_update = int(f.readline())
+    d = date.datetime.now(date.timezone(date.timedelta(hours=4)))
+    now = int(d.timestamp())
+    last_update = now - d.hour * 60*60 - d.minute * 60 - d.second
+    print(last_update)
     dg = list()
     cnt = 10
     while cnt > 0:
         cnt-=1
-        curdname = time.strftime('%Y-%m-%d', time.localtime(last_update ))
+        curdname = time.strftime('%Y-%m-%d', time.localtime(last_update))
+        l = []
         if os.path.exists('days/' + curdname + '/' + str(id) + '.txt'):
-            l = []
             with historyLock, open('days/' + curdname + '/' + str(id) + '.txt') as f:
                 for s in f:
                     s = s.split()
-                l.append([int(s[0]) - 8, int(s[3]) - last_update])
+                    l.append([int(s[0]) - 8, int(s[3]) - last_update, int(s[2])])
         dg.append([curdname, l])
         last_update -= day
+
+
+    fxdg = []
+    for dayname, lt in dg:
+        pos = -1
+        nlt = []
+        for el in lt:
+            if el[0] == 0 and pos == -1:
+                nlt.append(el)
+                pos = el[1]
+            elif el[0] == 0 and pos != -1:
+                nlt.append([1, pos + empty_timeout, 0])
+                nlt.append(el)
+                pos = el[1]
+            elif el[0] == 1 and pos != -1:
+                if el[2] == 1:
+                    el[1] -= timeout
+                nlt.append(el)
+                pos = -1
+        fxdg.append([dayname, lt])
+    dg = fxdg
+
     plt.figure(1, figsize=(20, len(dg) * 3 + 1))
     plt.subplot(2, 1, 1)
     dh = day
@@ -119,9 +164,10 @@ def makePersonalChart(id):
     for dayname, lt in dg:
         dx += 1
         pos = -1
-        usrclr = [random.random(), random.random(), random.random()]
+        usrclr = [random.random() / 2, random.random() / 2, random.random() / 2]
         usrclrfd = list(min(1, clr + 0.5) for clr in usrclr)
         plt.axhline(dx, lw = 1, color = usrclrfd)
+        # print(dayname, lt)
         for el in lt:
             if el[0] == 0 and pos == -1:
                 pos = el[1]
