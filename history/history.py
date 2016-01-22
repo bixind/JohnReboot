@@ -149,8 +149,8 @@ def makePersonalChart(id):
         fxdg.append([dayname, lt])
     dg = fxdg
 
-    plt.figure(1, figsize=(20, len(dg) * 3 + 1))
-    plt.subplot(2, 1, 1)
+    plt.figure(1, figsize=(20, len(dg)))
+    # plt.subplot(2, 1, 1)
     dh = day
     ch = 0
     while dh > 0:
@@ -168,7 +168,6 @@ def makePersonalChart(id):
         usrclr = [random.random() / 2, random.random() / 2, random.random() / 2]
         usrclrfd = list(min(1, clr + 0.5) for clr in usrclr)
         plt.axhline(dx, lw = 1, color = usrclrfd)
-        # print(dayname, lt)
         for el in lt:
             if el[0] == 0 and pos == -1:
                 pos = el[1]
@@ -178,9 +177,6 @@ def makePersonalChart(id):
         if pos != -1:
             plt.plot([pos // 60, day // 60], [dx, dx], color = usrclr, linewidth=2.0)
         plt.annotate(dayname, xy = (-offx, dx + 0.2), fontproperties = fonts.FontProperties(size = 10))
-    # plt.plot([0],[0], 'b', linewidth=2.0)
-    # plt.plot([day // 60],[dx + 1], 'b', linewidth=2.0)
-    # plt.annotate('KEK', xy = (2, 2.2))
     plt.axis([-offx, day // 60, 0, dx + 1])
     plt.axis('off')
     plt.savefig('pershist.png', bbox_inches = 'tight')
