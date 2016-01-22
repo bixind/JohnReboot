@@ -19,6 +19,7 @@ class VkApiExt(VkApi):
                  client_secret)
         self.methodLock = threading.Lock()
         self.id = self.method('users.get')[0]['id']
+        self.init_users()
         self.guid = 0
 
     def method(self, method, values=None, captcha_sid=None, captcha_key=None):
@@ -40,7 +41,6 @@ class VkApiExt(VkApi):
         names = self.method('users.get', {'user_ids' : ",".join(map(str, ids))})
         for user in names:
             self.users[int(user['id'])] = user
-        self.logged = self.method('users.get')[0]
 
     def get_user(self, id):
         id = int(id)

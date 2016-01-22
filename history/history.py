@@ -184,8 +184,34 @@ def makePersonalChart(id):
     plt.axis('off')
     plt.savefig('pershist.png', bbox_inches = 'tight')
 
-def getHistory(args, vk):
-    makeChart(vk)
-    vu = upl.VkUpload(vk)
-    r = vu.photo_messages(photos = ['hist.png'])
-    return {'attachment' : 'photo' + str(r[0]['owner_id']) + '_' + str(r[0]['id'])}
+def getHistory(com, vk):
+    if len(com.args) == 1:
+        makeChart(vk)
+        vu = upl.VkUpload(vk)
+        r = vu.photo_messages(photos=['hist.png'])
+    elif len(com.args) == 2:
+        r = vk.method('users.get', {'user_ids' : 'com.args[1]'})
+        id = r[0]['id']
+        if id in vk.users:
+            makePersonalChart(id)
+            vu = upl.VkUpload(vk)
+            r = vu.photo_messages(photos=['pershist.png'])
+        else:
+            return {'attachment': 'photo325483887_400964540'}
+    elif len(com.args) == 3:
+        lname = com.args[1]
+        fname = com.args[2]
+        id = -1
+        for user in vk.users:
+            if lname == user['last_name'].lower() and fname == user['first_name'].lower():
+                id = user['id']
+                break
+        if id in vk.users:
+            makePersonalChart(id)
+            vu = upl.VkUpload(vk)
+            r = vu.photo_messages(photos=['pershist.png'])
+        else:
+            return {'attachment': 'photo325483887_400964540'}
+    else:
+        return {'attachment': 'photo325483887_400964540'}
+    return {'attachment': 'photo' + str(r[0]['owner_id']) + '_' + str(r[0]['id'])}
