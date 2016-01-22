@@ -192,7 +192,7 @@ def getHistory(com, vk):
         r = vu.photo_messages(photos=['hist.png'])
     elif len(com.args) == 2:
         if (com.args[1] == 'я'):
-            id = vk.id
+            id = com.id
         else:
             r = vk.method('users.get', {'user_ids' : com.args[1]})
             id = r[0]['id']
