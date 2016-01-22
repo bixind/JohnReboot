@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import vk_api.vk_upload as upl
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fonts
@@ -190,8 +192,11 @@ def getHistory(com, vk):
         vu = upl.VkUpload(vk)
         r = vu.photo_messages(photos=['hist.png'])
     elif len(com.args) == 2:
-        r = vk.method('users.get', {'user_ids' : 'com.args[1]'})
-        id = r[0]['id']
+        if (com.args[1] == 'я'):
+            id = vk.id
+        else:
+            r = vk.method('users.get', {'user_ids' : com.args[1]})
+            id = r[0]['id']
         if id in vk.users:
             makePersonalChart(id)
             vu = upl.VkUpload(vk)
@@ -203,7 +208,7 @@ def getHistory(com, vk):
         fname = com.args[2]
         id = -1
         for user in vk.users:
-            if lname == user['last_name'].lower() and fname == user['first_name'].lower():
+            if lname == str(user['last_name']).lower() and fname == str(user['first_name']).lower():
                 id = user['id']
                 break
         if id in vk.users:
