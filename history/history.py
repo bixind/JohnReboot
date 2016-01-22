@@ -114,7 +114,6 @@ def makePersonalChart(id):
     d = date.datetime.now(date.timezone(date.timedelta(hours=4)))
     now = int(d.timestamp())
     last_update = now - d.hour * 60*60 - d.minute * 60 - d.second
-    print(last_update)
     dg = list()
     cnt = 10
     while cnt > 0:
@@ -207,7 +206,7 @@ def getHistory(com, vk):
         lname = com.args[1]
         fname = com.args[2]
         id = -1
-        for user in vk.users:
+        for user in vk.users.values():
             if lname == str(user['last_name']).lower() and fname == str(user['first_name']).lower():
                 id = user['id']
                 break
