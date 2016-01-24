@@ -1,5 +1,6 @@
 import threading
 import time
+import datetime as dt
 import fileparse as fp
 
 historyLock = threading.Lock()
@@ -11,10 +12,11 @@ with historyLock, open('days/lastupdate.txt') as f:
 def statusChange(upd):
     global last_update
     with historyLock:
-        now = round(time.time())
+        d = dt.datetime.now(dt.timezone(dt.timedelta(hours=3)))
+        now = round(d.timestamp())
         with open('history.txt', 'a') as f:
             print(*(upd + [now]), file = f)
-        curdname = time.strftime('%Y-%m-%d', time.localtime(now))
+        curdname = time.strftime('%Y-%m-%d', d.timetuple())
         id = -upd[1]
         fp.ensure_dir('days/' + curdname)
         with open('days/' + curdname + '/' + str(id) + '.txt', 'a') as f:
