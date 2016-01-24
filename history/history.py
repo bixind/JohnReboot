@@ -19,10 +19,13 @@ font = {'family': 'stixgeneral',
         'weight': 'normal'}
 mpl.rc('font', **font)
 
+def getTimeTuple(tstmp):
+    return date.datetime.fromtimestamp(tstmp, date.timezone(date.timedelta(hours=4))).timetuple()
+
 def makeChart(vk):
     d = date.datetime.now(date.timezone(date.timedelta(hours=4)))
-    now = int(time.time())
-    tp = time.localtime(now)
+    tp = d.timetuple()
+    now = int(d.timestamp())
     dh = day - (tp.tm_min * 60 + tp.tm_sec)
     ch = d.hour
     offx = 100
@@ -118,7 +121,7 @@ def makePersonalChart(id):
     cnt = 10
     while cnt > 0:
         cnt-=1
-        curdname = time.strftime('%Y-%m-%d', time.localtime(last_update))
+        curdname = time.strftime('%Y-%m-%d', getTimeTuple(last_update))
         l = []
         if os.path.exists('days/' + curdname + '/' + str(id) + '.txt'):
             with historyLock, open('days/' + curdname + '/' + str(id) + '.txt') as f:
