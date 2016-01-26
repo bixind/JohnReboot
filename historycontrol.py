@@ -12,7 +12,7 @@ with historyLock, open('days/lastupdate.txt') as f:
 def statusChange(upd):
     global last_update
     with historyLock:
-        d = dt.datetime.now(dt.timezone(dt.timedelta(hours=3)))
+        d = dt.datetime.now(dt.timezone(dt.timedelta(hours=4)))
         now = round(d.timestamp())
         with open('history.txt', 'a') as f:
             print(*(upd + [now]), file = f)

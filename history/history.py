@@ -22,7 +22,7 @@ mpl.rc('font', **font)
 def getTimeTuple(tstmp):
     return date.datetime.fromtimestamp(tstmp, date.timezone(date.timedelta(hours=4))).timetuple()
 
-def makeChart(vk):
+def makeChart(vk, interesting_users = None):
     d = date.datetime.now(date.timezone(date.timedelta(hours=4)))
     tp = d.timetuple()
     now = int(d.timestamp())
@@ -36,10 +36,11 @@ def makeChart(vk):
         for s in f:
             s = s.split()
             id = -int(s[1])
-            if id not in l:
-                l[id] = []
-            if now - day < int(s[3]):
-                l[id].append([int(s[0]) - 8, int(s[3]), int(s[2])])
+            if interesting_users is None or id in interesting_users:
+                if id not in l:
+                    l[id] = []
+                if now - day < int(s[3]):
+                    l[id].append([int(s[0]) - 8, int(s[3]), int(s[2])])
 
     fxl = dict()
 
