@@ -10,10 +10,10 @@ from longpoll import *
 from threading import *
 from tasks import *
 import logging as log
-from collections import namedtuple
 import time
 from historycontrol import statusChange
 import convert
+from constants import *
 
 log.basicConfig(filename='log.txt', format='%(asctime)s\n%(levelname)s:%(name)s:%(message)s', datefmt='%d/%m/%Y %H:%M:%S')
 
@@ -22,8 +22,6 @@ with open('session.token') as f:
 
 vk = vk_api.vk_api_ext.VkApiExt(token=at)
 disp = Dispenser(vk)
-
-Command = namedtuple('Command', ['id', 'args'])
 
 def processMessage(vk, disp, upd):
     try:
@@ -35,7 +33,7 @@ def processMessage(vk, disp, upd):
         values['user_id'] = upd[3]
         if len(args) > 0 and len(args[0]) > 0 and args[0][0] is '!':
             args[0] = args[0][1:]
-            newvals = disp.dispense(Command(upd[3], args))
+            newvals = disp.dispense(Command(upd[3], args, upd[7]))
             del values['message']
             values.update(newvals)
         else:

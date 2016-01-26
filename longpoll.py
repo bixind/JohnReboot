@@ -23,7 +23,7 @@ def longpoll(vk, handler):
         ts = v['ts']
         key = v['key']
         wait = 25
-        mode = 2
+        mode = 2 + 8
         try:
             while True:
                 data = urlencode({'act':'a_check', 'key' : key, 'ts' : ts, 'wait' : wait, 'mode' : mode})

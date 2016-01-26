@@ -5,8 +5,10 @@ import audio.audio as audio
 import aliases.aliases as aliases
 import instrate.instrate as instrate
 import history.history as history
+import  pollanalyse.pollanalyse as pollanalyse
 from time import *
 import logging
+
 
 def defaultModule(com, vk):
     return {'message' : 'Nemo omnia potest scire'}
@@ -17,7 +19,8 @@ class Dispenser:
                         'аудио' : audio.getAudio,
                         'иначе' : aliases.setAlias,
                         'рейтинг' : instrate.getRating,
-                        'история' : history.getHistory}
+                        'история' : history.getHistory,
+                        'опрос' : pollanalyse.getPollInfo}
         self.vk = vk
 
     def dispense(self, com):
