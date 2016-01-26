@@ -16,7 +16,7 @@ def pollsParse(vk, walls):
         if 'attachments' in post:
             for attch in post['attachments']:
                 if attch['type'] == 'poll':
-                    res.append(pollResults(vk, attch))
+                    res.append(pollResults(vk, attch['poll']))
     return "\n".join(res)
 
 def getPollInfo(com, vk):
