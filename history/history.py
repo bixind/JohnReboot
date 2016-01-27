@@ -187,6 +187,10 @@ def makePersonalChart(id):
 
 def getHistory(com, vk):
     if len(com.args) == 1:
+        makePersonalChart(com.id)
+        vu = upl.VkUpload(vk)
+        r = vu.photo_messages(photos=['pershist.png'])
+    elif len(com.args) == 2 and com.args[1] == 'все':
         makeChart(vk)
         vu = upl.VkUpload(vk)
         r = vu.photo_messages(photos=['hist.png'])
