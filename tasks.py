@@ -32,7 +32,7 @@ class Dispenser:
             if newargs is None:
                 return defaultModule(com, self.vk)
             args = (newargs + com.args[1:])
-            com = com.__new__(com.__class__, com.id, args)
+            com = com._replace(args=args)
             command = com.args[0]
             if command in self.modules:
                 return self.modules[com.args[0]](com, self.vk)
