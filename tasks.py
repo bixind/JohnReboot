@@ -5,7 +5,8 @@ import audio.audio as audio
 import aliases.aliases as aliases
 import instrate.instrate as instrate
 import history.history as history
-import  pollanalyse.pollanalyse as pollanalyse
+import pollanalyse.pollanalyse as pollanalyse
+import imageprocessing.imageprocessing as images
 from time import *
 import logging
 
@@ -20,7 +21,8 @@ class Dispenser:
                         'иначе' : aliases.setAlias,
                         'рейтинг' : instrate.getRating,
                         'история' : history.getHistory,
-                        'опрос' : pollanalyse.getPollInfo}
+                        'опрос' : pollanalyse.getPollInfo,
+                        'шакализировать' : images.getShakalized}
         self.vk = vk
 
     def dispense(self, com):
@@ -40,3 +42,4 @@ class Dispenser:
         except Exception as e:
             logging.exception(e)
             return 'Error'
+
