@@ -3,7 +3,7 @@ from constants import getAttachments
 from urllib.request import *
 from vk_api.vk_upload import *
 
-imgbuf = "image/"
+imgbuf = "imageprocessing/"
 
 def shakalize(imgpath, deg):
     im = Image.open(imgpath)
@@ -30,7 +30,6 @@ def getShakalized(com, vk):
     for sz in r[0]['sizes']:
         if sz['type'] == 'x':
             src = sz['src']
-
     img = urlopen(src)
     with open(imgbuf + 'buf.jpg', 'wb') as f:
         f.write(img.read())
