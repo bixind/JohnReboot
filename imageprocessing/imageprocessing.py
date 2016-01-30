@@ -36,4 +36,4 @@ def getShakalized(com, vk):
     pth = shakalize(imgbuf + 'buf.jpg', 10 - deg)
     vu = VkUpload(vk)
     r = vu.photo_messages(pth)
-    return {'attachments' : 'photo' + str(r[0]['owner_id']) + '_' + str(r[0]['id'])}
+    return {'attachment' : 'photo' + str(r[0]['owner_id']) + '_' + str(r[0]['id'])}

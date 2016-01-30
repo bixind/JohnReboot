@@ -9,4 +9,5 @@ def getAttachments(misc, type):
     while 'attach' + str(i) in misc:
         if misc['attach' + str(i) + '_type'] == type:
             res.append(tuple(map(int, misc['attach' + str(i)].split('_'))))
+        i+=1
     return res
