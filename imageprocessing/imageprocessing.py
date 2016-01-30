@@ -12,7 +12,7 @@ def shakalize(imgpath, deg):
     return imgbuf + "shakalized.jpg"
 
 def getShakalized(com, vk):
-    photos = getAttachments(com.misc)
+    photos = getAttachments(com.misc, 'photo')
     if len(photos) == 0:
         return {'attachment' : 'photo325483887_402170372'}
     if len(com.args) == 1:
