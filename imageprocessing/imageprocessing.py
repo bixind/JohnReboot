@@ -26,7 +26,7 @@ def getShakalized(com, vk):
             return {'attachment' : 'photo325483887_402170372'}
     else:
         return {'attachment' : 'photo325483887_402170372'}
-    r = vk.method('photos.getById', {'photos': '325483887_402170372', 'photo_sizes': 1})
+    r = vk.method('photos.getById', {'photos': str(photos[0][0]) + '_' + str(photos[0][1]), 'photo_sizes': 1})
     for sz in r[0]['sizes']:
         if sz['type'] == 'x':
             src = sz['src']
