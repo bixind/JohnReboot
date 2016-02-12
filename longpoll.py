@@ -8,7 +8,7 @@ import logging
 
 
 class Handler:
-    def __init__(self, commands = {}):
+    def __init__(self, commands = dict()):
         self.commands = commands
 
     def handle(self, upd):
