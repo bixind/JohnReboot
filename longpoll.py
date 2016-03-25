@@ -36,7 +36,6 @@ def longpoll(vk, handler):
                     ts = l['ts']
                     for upd in l['updates']:
                         handler.handle(upd)
-                    vk.method('account.setOnline', {'void' : 0})
             except HTTPError as e:
                 logging.error(e)
             except Exception as e:
