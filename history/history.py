@@ -22,14 +22,7 @@ mpl.rc('font', **font)
 def getTimeTuple(tstmp):
     return date.datetime.fromtimestamp(tstmp, date.timezone(date.timedelta(hours=4))).timetuple()
 
-def makeChart(vk, interesting_users = None):
-    d = date.datetime.now(date.timezone(date.timedelta(hours=4)))
-    tp = d.timetuple()
-    now = int(d.timestamp())
-    dh = day - (tp.tm_min * 60 + tp.tm_sec)
-    ch = d.hour
-    offx = 100
-
+def getUserLogs(interesting_users, now):
     l = dict()
 
     with historyLock, open('history.txt') as f:
@@ -61,12 +54,14 @@ def makeChart(vk, interesting_users = None):
                 fxl[id].append(el)
                 pos = -1
     l = fxl
+    return l
 
+def getUsersSortedByTime(log, now):
     tmid = []
-    for id in l:
+    for id in log:
         st = 0
         pos = -1
-        for el in l[id]:
+        for el in log[id]:
             if el[0] == 0 and pos == -1:
                 pos = el[1]
             elif el[0] == 1 and pos != -1:
@@ -76,29 +71,42 @@ def makeChart(vk, interesting_users = None):
             st += now - pos
         tmid.append([st, id])
     tmid.sort(key = lambda x : x[0])
+    return list(p[1] for p in tmid)
 
-    r = vk.method('users.get', {'user_ids' : ','.join(str(u) for u in l)})
+def getUsernames(users, vk):
+    r = vk.method('users.get', {'user_ids' : ','.join(str(u) for u in users)})
     usernames = dict()
     for user in r:
         usernames[user['id']] = user['first_name'] + ' ' + user['last_name']
+    return usernames
 
-    plt.figure(1, figsize=(20, len(l) * 3 + 1))
+def drawLog(d, log, tmid, usernames):
+    tp = d.timetuple()
+    now = int(d.timestamp())
+    dh = day - (tp.tm_min * 60 + tp.tm_sec)
+    ch = d.hour
+    offx = 100
+
+    plt.figure(1, figsize=(20, len(log) * 3 + 1))
     plt.subplot(2, 1, 1)
     while dh > 0:
-        plt.axvline(dh // 60, ls = 'dashed', color = '#B0B0B0')
+        if (ch == 0):
+            plt.axvline(dh // 60, ls = 'dashed', color = '#FF0000')
+        else:
+            plt.axvline(dh // 60, ls = 'dashed', color = '#B0B0B0')
         plt.annotate(str(ch) + ':00', xy = (dh // 60 + 5, 0), fontproperties = fonts.FontProperties(size = 10))
         dh -= 60*60
         ch -= 1
         if ch < 0:
             ch += 24
     dx = 0
-    for st, id in tmid:
+    for id in tmid:
         dx += 1
         pos = -1
         usrclr = [random.random() / 2, random.random() / 2, random.random() / 2]
         usrclrfd = list(min(1, clr + 0.5) for clr in usrclr)
         plt.axhline(dx, lw = 1, color = usrclrfd)
-        for el in l[id]:
+        for el in log[id]:
             if el[0] == 0 and pos == -1:
                 pos = el[1]
             elif el[0] == 1 and pos != -1:
@@ -112,7 +120,49 @@ def makeChart(vk, interesting_users = None):
     # plt.annotate('KEK', xy = (2, 2.2))
     plt.axis([-offx, day // 60, 0, dx + 1])
     plt.axis('off')
-    plt.savefig('hist.png', bbox_inches = 'tight')
+
+def drawRelativeLog(d, log, tmid, base_user, usernames):
+    tp = d.timetuple()
+    now = int(d.timestamp())
+    dh = day - (tp.tm_min * 60 + tp.tm_sec)
+    ch = d.hour
+    offx = 100
+    pos = -1
+    drawLog(d, log, tmid, usernames)
+    bgclr = '#70E4E7'
+    for el in log[base_user]:
+        if el[0] == 0 and pos == -1:
+            pos = el[1]
+        elif el[0] == 1 and pos != -1:
+            plt.axvspan((pos - now + day) // 60, (el[1] - now + day) // 60, 0, 1, color = bgclr, fill = False, hatch = '/')
+            pos = -1
+    if pos != -1:
+        plt.axvspan((pos - now + day) // 60, day // 60, 0, 1, color = bgclr, fill = False, hatch = '/')
+
+def savePlot(filename):
+    plt.savefig(filename, bbox_inches = 'tight')
+
+def makeChart(vk, interesting_users = None):
+    d = date.datetime.now(date.timezone(date.timedelta(hours=4)))
+    now = int(d.timestamp())
+    l = getUserLogs(interesting_users, now)
+    tmid = getUsersSortedByTime(l, now)
+    usernames = getUsernames(list(l.keys()), vk)
+    drawLog(d, l, tmid, usernames)
+    savePlot('hist.png')
+
+def makeRelativeChart(vk, base_user, interesting_users = None):
+    if interesting_users is not None and base_user not in interesting_users:
+        interesting_users = list(interesting_users).append(base_user)
+    d = date.datetime.now(date.timezone(date.timedelta(hours=4)))
+    now = int(d.timestamp())
+    l = getUserLogs(interesting_users, now)
+    tmid = getUsersSortedByTime(l, now)
+    tmid.remove(base_user)
+    tmid.append(base_user)
+    usernames = getUsernames(list(l.keys()), vk)
+    drawRelativeLog(d, l, tmid, base_user, usernames)
+    savePlot('hist.png')
 
 def makePersonalChart(id):
     d = date.datetime.now(date.timezone(date.timedelta(hours=4)))
