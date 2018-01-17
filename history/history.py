@@ -12,7 +12,8 @@ import os.path
 
 day = 60 * 60 * 24
 empty_timeout = 5*60
-timeout = 14 * 60
+# timeout = 14 * 60
+timeout = 0
 
 mpl.rcdefaults()
 font = {'family': 'stixgeneral',

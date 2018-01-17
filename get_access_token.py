@@ -2,22 +2,28 @@
 
 import sys
 from vk_api import vk_api
+from urllib.request import *
+from urllib.parse import *
+from urllib.error import *
+from config import *
+import re
 
-def get_access_token(login, password):
-	vk = vk_api.VkApi(login, password)
-	try:
-		vk.authorization()
-	except vk_api.AuthorizationError as error_msg:
-		print(error_msg)
-		exit()
-	print("Authorization: OK")
-	return vk.token["access_token"]
+def make_auth_url(app_id, scope):
+    base = 'https://oauth.vk.com/authorize'
+    data = urlencode({'client_id': str(app_id), 'redirect_uri': 'https://oauth.vk.com/blank.html',
+                      'scope': scope, 'response_type': 'token', 'v': '5.69'})
+    s = base + '?' + data
+    return s
 
-f = open('config.txt', 'r')
-#login, password = sys.stdin.readline().split()
-login, password = f.readline().split()
-f.close()
+def extract_token(url):
+    pass
 
-access_token = get_access_token(login, password)
+print('Please enter page url after redirect:')
+print(make_auth_url(app_id, 2 | 4096 | 65536))
+res = input()
+
+p = re.compile(r'access_token=(\w+)')
+token = p.search(res).group(1)
+
 with open("session.token", "wb") as f:
-	f.write(access_token.encode())
+	f.write(token.encode())
